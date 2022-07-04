@@ -1,8 +1,6 @@
 import { Bottle } from "./bottle";
 
-export interface LevelState {
-    bottles: Array<Bottle>
-}
+export type LevelState = Array<Bottle>
 
 export interface Level {
     index: number,

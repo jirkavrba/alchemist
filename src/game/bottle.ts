@@ -20,18 +20,23 @@ export class Bottle {
         return this.stack.length === this.capacity;
     }
 
-    public getTopmostSegment(): Array<Color> | null {
+    public getTopmostSegment(): Array<Color> {
         if (this.isEmpty()) {
-            return null;
+            return [];
         }
 
-        const reversed = [...this.stack].reverse();
-        const length = reversed.findIndex((color, index) =>
-            index === reversed.length &&
-            color !== reversed[0]
-        );
+        const matching = [];
+        const target = this.stack[0];
 
-        return [...reversed].slice(length);
+        for (let color of this.stack) {
+            if (color !== target) {
+                return matching;
+            }
+
+            matching.push(color);
+        }
+
+        return matching;
     }
 
     public canBePouredInto(destination: Bottle): boolean {
@@ -39,15 +44,31 @@ export class Bottle {
             return false;
         }
 
+        const segment = this.getTopmostSegment();
+        const fits = segment.length <= (destination.capacity - destination.stack.length);
+
+        console.log(this.stack, destination.stack, segment, destination.isEmpty(), fits);
+
+        if (destination.isEmpty() && fits) {
+            return true;
+        }
+
         if (destination.isFull()) {
             return false;
         }
 
-        const segment = this.getTopmostSegment();
-        const other = destination.getTopmostSegment();
+        return (segment[0] === destination.stack[0]) && fits;
+    }
 
-        return segment !== null &&
-               other !== null &&
-               other[0] === segment[0];
+    public pourInto(destination: Bottle): [Bottle, Bottle] {
+        console.log(this.getTopmostSegment());
+
+        const source = [...this.stack].slice(this.getTopmostSegment().length);
+        const target = [...this.getTopmostSegment(), ...destination.stack];
+
+        return [
+            new Bottle(this.capacity, source),
+            new Bottle(destination.capacity, target)
+        ]
     }
 }
