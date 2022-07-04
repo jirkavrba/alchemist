@@ -1,21 +1,12 @@
-function App() {
+export const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className="flex flex-col">
+      <header className="bg-sky-600 py-8 border-b-8 border-sky-700 text-center">
+        <h1 className="text-4xl font-black text-sky-100">The Alchemist</h1>
       </header>
+      <main>
+        <button>Start</button> 
+      </main>
     </div>
   );
-}
-
-export default App;
+};
