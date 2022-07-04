@@ -40,29 +40,22 @@ export class Bottle {
     }
 
     public canBePouredInto(destination: Bottle): boolean {
-        if (this.isEmpty()) {
+        if (this.isEmpty() || destination.isFull()) {
             return false;
         }
 
         const segment = this.getTopmostSegment();
-        const fits = segment.length <= (destination.capacity - destination.stack.length);
+        const space = destination.capacity - destination.stack.length;
 
-        console.log(this.stack, destination.stack, segment, destination.isEmpty(), fits);
+        const matches = destination.isEmpty() || segment[0] === destination.stack[0];
+        const fits = segment.length <= space;
 
-        if (destination.isEmpty() && fits) {
-            return true;
-        }
+        console.log(segment, this.stack, destination.stack, space);
 
-        if (destination.isFull()) {
-            return false;
-        }
-
-        return (segment[0] === destination.stack[0]) && fits;
+        return matches && fits;
     }
 
     public pourInto(destination: Bottle): [Bottle, Bottle] {
-        console.log(this.getTopmostSegment());
-
         const source = [...this.stack].slice(this.getTopmostSegment().length);
         const target = [...this.getTopmostSegment(), ...destination.stack];
 
